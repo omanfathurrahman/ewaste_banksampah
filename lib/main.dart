@@ -1,3 +1,5 @@
+import 'package:ewaste_banksampah/pages/auth/login.dart';
+import 'package:ewaste_banksampah/pages/auth/signup.dart';
 import 'package:ewaste_banksampah/pages/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -37,6 +39,14 @@ final _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const LandingPage(),
+    ),
+    GoRoute(
+      path: 'login',
+      builder: (context, state) => const LoginPage(),
+    ),
+    GoRoute(
+      path: 'signUp',
+      builder: (context, state) => const SignUpPage(),
     ),
   ],
 );
