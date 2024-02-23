@@ -4,8 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailSampahDidonasikanPage extends StatefulWidget {
-  const DetailSampahDidonasikanPage({super.key, required this.sampahDibuangId});
-  final num sampahDibuangId;
+  const DetailSampahDidonasikanPage(
+      {super.key, required this.sampahDidonasikan});
+  final num sampahDidonasikan;
 
   @override
   State<DetailSampahDidonasikanPage> createState() =>
@@ -14,18 +15,22 @@ class DetailSampahDidonasikanPage extends StatefulWidget {
 
 class _DetailSampahDidonasikanPageState
     extends State<DetailSampahDidonasikanPage> {
-  late PostgrestFilterBuilder<List<Map<String, dynamic>>> detailSampahDibuang;
+  late PostgrestFilterBuilder<List<Map<String, dynamic>>>
+      detailSampahDidonasikan;
 
   @override
   void initState() {
     tes();
-    detailSampahDibuang = supabase.from('detail_sampah_dibuang').select('''
+    setState(() {
+      detailSampahDidonasikan =
+          supabase.from('detail_sampah_didonasikan').select('''
       jumlah,
       kategorisasi,
       jenis_elektronik (
         jenis
       )
-    ''').eq('id_sampah_dibuang', widget.sampahDibuangId);
+    ''').eq('id_sampah_didonasikan', widget.sampahDidonasikan);
+    });
     super.initState();
   }
 
@@ -45,7 +50,7 @@ class _DetailSampahDidonasikanPageState
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: ListView(children: [
             Text(
-              "Id Sampah Dibuang: ${widget.sampahDibuangId.toString()}",
+              "Id Sampah Dibuang: ${widget.sampahDidonasikan.toString()}",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 10),
@@ -53,7 +58,7 @@ class _DetailSampahDidonasikanPageState
             SizedBox(
               width: double.infinity,
               child: FutureBuilder(
-                future: detailSampahDibuang,
+                future: detailSampahDidonasikan,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const CircularProgressIndicator();

@@ -4,6 +4,7 @@ import 'package:ewaste_banksampah/pages/buang/sampah_dibuang.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ewaste_banksampah/pages/donasi/sampah_didonasikan.dart';
+import 'package:go_router/go_router.dart';
 
 class AfterLoginLayout extends StatefulWidget {
   const AfterLoginLayout({super.key});
@@ -24,6 +25,15 @@ class _AfterLoginLayoutState extends State<AfterLoginLayout> {
           const Text('Sampah Dibuang'),
           const Text('Sampah Didonasikan'),
           const Text('Profile'),
+        ][currentPageIndex],
+        actions: [
+          [TextButton(onPressed: () {
+            context.go('/detailSampahDibuang/berangkat');
+          }, child: const Text('Diambil'))],
+          [TextButton(onPressed: () {
+            context.go('/detailSampahDidonasikan/berangkat');
+          }, child: const Text('Diambil'))],
+          null,
         ][currentPageIndex],
       ),
       body: [
@@ -50,7 +60,7 @@ class _AfterLoginLayoutState extends State<AfterLoginLayout> {
           ),
           NavigationDestination(
             icon: Icon(Icons.wifi_1_bar),
-            label: 'Didonasikan',
+            label: 'Profile',
           ),
         ],
       ),

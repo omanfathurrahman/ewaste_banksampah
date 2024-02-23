@@ -10,7 +10,6 @@ class SampahDibuangPage extends StatefulWidget {
 }
 
 class _SampahDibuangPageState extends State<SampahDibuangPage> {
-
   @override
   void initState() {
     _getSampahDibuangList();
@@ -23,38 +22,42 @@ class _SampahDibuangPageState extends State<SampahDibuangPage> {
   }
 
   Future<List<Map<String, dynamic>>> _getSampahDibuangList() async {
-    final droppoinId = await _getDroppoinId();
     final response = await supabase
-      .from('sampah_dibuang')
-      .select('''
-    id,
-    status_dibuang,
-    profile(
-      nama_lengkap
-    )
-    ''')
-      .eq('status_dibuang', "Belum diserahkan")
-      .eq('pilihan_antar_jemput', "diantar")
-      .eq("droppoin_id", droppoinId);
+        .from('sampah_dibuang')
+        .select('''
+          id,
+          status_dibuang,
+          banksampah_id,
+          profile(
+            nama_lengkap
+          )
+        ''')
+        .eq('status_dibuang', "Belum diserahkan")
+        .eq('pilihan_antar_jemput', "dijemput");
 
     return response;
   }
 
-  Future<num> _getDroppoinId() async {
-    final response = await supabase
-        .from('profile_droppoin')
-        .select('id')
-        .eq('email', supabase.auth.currentUser!.email!)
-        .single()
-        .limit(1);
-    return response['id'];
-  }
-
   Future<void> _konfirmasi(num id) async {
+    print(id);
+    final banksampah_id = await _getBanksampahId();
     await supabase
         .from('sampah_dibuang')
-        .update({'status_dibuang': 'Sudah diserahkan'}).eq('id', id);
+        .update({'banksampah_id': banksampah_id}).eq('id', id);
 
+    setState(() {});
+    if (mounted) context.go('/detailSampahDibuang/berangkat/$id	');
+  }
+
+  Future<num> _getBanksampahId() async {
+    final response = await supabase
+        .from('profile_banksampah')
+        .select('banksampah_id')
+        .eq('user_id', supabase.auth.currentUser!.id)
+        .single()
+        .limit(1);
+
+    return response['banksampah_id'] as num;
   }
 
   @override
@@ -75,50 +78,54 @@ class _SampahDibuangPageState extends State<SampahDibuangPage> {
                     final listSampahDibuang = snapshot.data as List;
                     return Column(
                       children: listSampahDibuang
-                          .map((itemSampahDibuang) => Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                              "Id: ${itemSampahDibuang['id'].toString()}"),
-                                          Text(itemSampahDibuang['profile']
-                                              ['nama_lengkap']),
-                                          const Text("Sampah belum diterima"),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      Colors.orange[500]),
+                          .map((itemSampahDibuang) => (itemSampahDibuang[
+                                      'banksampah_id'] ??
+                                  0) > 0  
+                              ? Container()
+                              : Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                "Id: ${itemSampahDibuang['id'].toString()}"),
+                                            Text(itemSampahDibuang['profile']
+                                                ['nama_lengkap']),
+                                            const Text("Sampah belum diterima"),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.orange[500]),
+                                                onPressed: () {
+                                                  context.go(
+                                                      '/detailSampahDibuang/detail/${itemSampahDibuang['id']}');
+                                                },
+                                                child: const Text('detail')),
+                                            const SizedBox(height: 4),
+                                            ElevatedButton(
                                               onPressed: () {
-                                                context.go(
-                                                    '/detailSampahDibuang/${itemSampahDibuang['id']}');
+                                                _konfirmasi(
+                                                    itemSampahDibuang['id']);
                                               },
-                                              child: const Text('detail')),
-                                          const SizedBox(height: 4),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              _konfirmasi(
-                                                  itemSampahDibuang['id']);
-                                            },
-                                            child: const Text("selesai"),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                              child: const Text("Ambil"),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ))
+                                ))
                           .toList(),
                     );
                   }

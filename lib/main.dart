@@ -1,6 +1,14 @@
+import 'package:ewaste_banksampah/pages/after_login_layout.dart';
+import 'package:ewaste_banksampah/pages/buang/berangkat/berangkat.dart';
 import 'package:ewaste_banksampah/pages/auth/login.dart';
 import 'package:ewaste_banksampah/pages/auth/signup.dart';
+import 'package:ewaste_banksampah/pages/buang/berangkat/ambil/ambil.dart';
+import 'package:ewaste_banksampah/pages/buang/detail_sampah_dibuang.dart';
+import 'package:ewaste_banksampah/pages/donasi/berangkat/ambil/ambil.dart';
+import 'package:ewaste_banksampah/pages/donasi/berangkat/berangkat.dart';
+import 'package:ewaste_banksampah/pages/donasi/detail_sampah_didonasikan.dart';
 import 'package:ewaste_banksampah/pages/landing_page.dart';
+import 'package:ewaste_banksampah/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -41,12 +49,44 @@ final _router = GoRouter(
       builder: (context, state) => const LandingPage(),
     ),
     GoRoute(
-      path: 'login',
+      path: '/splash',
+      builder: (context, state) => const SplashPage(),
+    ),
+    GoRoute(
+      path: '/login',
       builder: (context, state) => const LoginPage(),
     ),
     GoRoute(
-      path: 'signUp',
+      path: '/signUp',
       builder: (context, state) => const SignUpPage(),
+    ),
+    GoRoute(
+      path: '/afterLoginLayout',
+      builder: (context, state) => const AfterLoginLayout(),
+    ),
+    GoRoute(
+      path: '/detailSampahDibuang/detail/:id',
+      builder: (context, state) => DetailSampahDibuangPage(sampahDibuangId: int.parse(state.pathParameters['id']!)),
+    ),
+    GoRoute(
+      path: '/detailSampahDidonasikan/detail/:id',
+      builder: (context, state) => DetailSampahDidonasikanPage(sampahDidonasikan: int.parse(state.pathParameters['id']!)),
+    ),
+    GoRoute(
+      path: '/detailSampahDibuang/berangkat',
+      builder: (context, state) => const BerangkatBuangList(),
+    ),
+    GoRoute(
+      path: '/detailSampahDidonasikan/berangkat',
+      builder: (context, state) => const BerangkatDonasiList(),
+    ),
+    GoRoute(
+      path: '/detailSampahDibuang/berangkat/:id',
+      builder: (context, state) => AmbilBuang(sampahDibuangId: int.parse(state.pathParameters['id']!)),
+    ),
+    GoRoute(
+      path: '/detailSampahDidonasikan/berangkat/:id',
+      builder: (context, state) => AmbilDonasi(sampahDibuangId: int.parse(state.pathParameters['id']!)),
     ),
   ],
 );
