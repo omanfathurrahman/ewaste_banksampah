@@ -34,7 +34,7 @@ class _DetailSampahDibuangPageState extends State<DetailSampahDibuangPage> {
         appBar: AppBar(
           title: const Text('Detail Sampah Dibuang'),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               context.go('/afterLoginLayout');
             },
@@ -45,10 +45,10 @@ class _DetailSampahDibuangPageState extends State<DetailSampahDibuangPage> {
           child: ListView(children: [
             Text(
               "Id Sampah Dibuang: ${widget.sampahDibuangId.toString()}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 10),
-            Text('Barang-barang yang dibuang:'),
+            const Text('Barang-barang yang dibuang:'),
             SizedBox(
               width: double.infinity,
               child: FutureBuilder(
