@@ -4,9 +4,11 @@ import 'package:ewaste_banksampah/pages/auth/login.dart';
 import 'package:ewaste_banksampah/pages/auth/signup.dart';
 import 'package:ewaste_banksampah/pages/buang/berangkat/ambil/ambil.dart';
 import 'package:ewaste_banksampah/pages/buang/detail_sampah_dibuang.dart';
+import 'package:ewaste_banksampah/pages/buang/riwayat/riwayat_buang.dart';
 import 'package:ewaste_banksampah/pages/donasi/berangkat/ambil/ambil.dart';
 import 'package:ewaste_banksampah/pages/donasi/berangkat/berangkat.dart';
 import 'package:ewaste_banksampah/pages/donasi/detail_sampah_didonasikan.dart';
+import 'package:ewaste_banksampah/pages/donasi/riwayat/riwayat_donasi.dart';
 import 'package:ewaste_banksampah/pages/landing_page.dart';
 import 'package:ewaste_banksampah/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: _router,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -81,12 +84,20 @@ final _router = GoRouter(
       builder: (context, state) => const BerangkatDonasiList(),
     ),
     GoRoute(
+      path: '/riwayat-buang',
+      builder: (context, state) => const RiwayatBuangPage(),
+    ),
+    GoRoute(
+      path: '/riwayat-donasi',
+      builder: (context, state) => const RiwayatDonasiPage(),
+    ),
+    GoRoute(
       path: '/detailSampahDibuang/berangkat/:id',
       builder: (context, state) => AmbilBuang(sampahDibuangId: int.parse(state.pathParameters['id']!)),
     ),
     GoRoute(
       path: '/detailSampahDidonasikan/berangkat/:id',
-      builder: (context, state) => AmbilDonasi(sampahDibuangId: int.parse(state.pathParameters['id']!)),
+      builder: (context, state) => AmbilDonasi(sampahDidonasikanId: int.parse(state.pathParameters['id']!)),
     ),
   ],
 );
