@@ -27,12 +27,32 @@ class _AfterLoginLayoutState extends State<AfterLoginLayout> {
           const Text('Profile'),
         ][currentPageIndex],
         actions: [
-          [TextButton(onPressed: () {
-            context.go('/detailSampahDibuang/berangkat');
-          }, child: const Text('Diambil'))],
-          [TextButton(onPressed: () {
-            context.go('/detailSampahDidonasikan/berangkat');
-          }, child: const Text('Diambil'))],
+          [
+            TextButton(
+                onPressed: () {
+                  context.go('/detailSampahDibuang/berangkat');
+                },
+                child: const Text('Diambil')),
+            IconButton(
+              onPressed: () {
+                context.go('/riwayat-buang');
+              },
+              icon: const Icon(Icons.history),
+            )
+          ],
+          [
+            TextButton(
+                onPressed: () {
+                  context.push('/detailSampahDidonasikan/berangkat');
+                },
+                child: const Text('Diambil')),
+            IconButton(
+              onPressed: () {
+                context.push('/riwayat-donasi');
+              },
+              icon: const Icon(Icons.history),
+            )
+          ],
           null,
         ][currentPageIndex],
       ),
