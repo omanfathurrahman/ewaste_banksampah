@@ -54,10 +54,11 @@ class _BerangkatBuangListState extends State<BerangkatBuangList> {
       ),
       body: ListView(children: [
         FutureBuilder(future: _getSampahDibuangYangDiambilList(), builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState != ConnectionState.done) {
             return const CircularProgressIndicator();
           } 
           final data = snapshot.data as List<Map<String, dynamic>>;
+          if (data.isEmpty) return const Center(child: Text("Belum ada sampah dibuang yang diambil"));
           return Column(
             children: data.map((item) {
               return Card(

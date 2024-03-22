@@ -1,4 +1,5 @@
 import 'package:ewaste_banksampah/main.dart';
+import 'package:ewaste_banksampah/utils/get_user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,7 +13,7 @@ class BerangkatDonasiList extends StatefulWidget {
 class _BerangkatDonasiListState extends State<BerangkatDonasiList> {
   Future<List<Map<String, dynamic>>>
       _getSampahDidonasikanYangDiambilList() async {
-    final banksampahId = await _getBanksampahId();
+    final banksampahId = await getBanksampahId();
     final response = await supabase
         .from('sampah_didonasikan')
         .select('''
@@ -30,24 +31,13 @@ class _BerangkatDonasiListState extends State<BerangkatDonasiList> {
     return response;
   }
 
-  Future<num> _getBanksampahId() async {
-    final res = await supabase
-        .from("profile_banksampah")
-        .select("banksampah_id")
-        .eq("user_id", supabase.auth.currentUser!.id)
-        .single()
-        .limit(1);
-
-    return res["banksampah_id"] as num;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
-            context.go('/afterLoginLayout');
+            context.pop();
           },
         ),
         title: const Text('Sampah didonasikan yang diambil'),
@@ -60,6 +50,7 @@ class _BerangkatDonasiListState extends State<BerangkatDonasiList> {
               return const CircularProgressIndicator();
             }
             final data = snapshot.data as List<Map<String, dynamic>>;
+            if (data.isEmpty) return const Center(child: Text("Belum ada sampah didonasikan yang diambil"));
             return Column(
               children: data.map((item) {
                 return Card(

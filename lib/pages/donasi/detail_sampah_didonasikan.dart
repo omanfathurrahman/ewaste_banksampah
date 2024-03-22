@@ -20,7 +20,6 @@ class _DetailSampahDidonasikanPageState
 
   @override
   void initState() {
-    tes();
     setState(() {
       detailSampahDidonasikan =
           supabase.from('detail_sampah_didonasikan').select('''
@@ -38,9 +37,9 @@ class _DetailSampahDidonasikanPageState
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Detail Sampah Dibuang'),
+          title: const Text('Detail Sampah Didonasikan'),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               context.go('/afterLoginLayout');
             },
@@ -50,11 +49,11 @@ class _DetailSampahDidonasikanPageState
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: ListView(children: [
             Text(
-              "Id Sampah Dibuang: ${widget.sampahDidonasikan.toString()}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              "Id Sampah Didonasikan: ${widget.sampahDidonasikan.toString()}",
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 10),
-            Text('Barang-barang yang dibuang:'),
+            const Text('Barang-barang yang didonasikan:'),
             SizedBox(
               width: double.infinity,
               child: FutureBuilder(
@@ -67,7 +66,7 @@ class _DetailSampahDidonasikanPageState
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: data
-                        .map((itemDetailSampahDibuang) => SizedBox(
+                        .map((itemDetailSampahDidonasikan) => SizedBox(
                               width: double.infinity,
                               child: Card(
                                 child: Padding(
@@ -77,14 +76,14 @@ class _DetailSampahDidonasikanPageState
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                          'Jumlah: ${itemDetailSampahDibuang['jumlah']}'),
-                                      if (itemDetailSampahDibuang[
+                                          'Jumlah: ${itemDetailSampahDidonasikan['jumlah']}'),
+                                      if (itemDetailSampahDidonasikan[
                                               'kategorisasi'] !=
                                           null)
                                         Text(
-                                            'Jenis: ${itemDetailSampahDibuang['kategorisasi']}'),
+                                            'Jenis: ${itemDetailSampahDidonasikan['kategorisasi']}'),
                                       Text(
-                                          'Jenis Elektronik: ${itemDetailSampahDibuang['jenis_elektronik']['jenis']}'),
+                                          'Jenis Elektronik: ${itemDetailSampahDidonasikan['jenis_elektronik']['jenis']}'),
                                     ],
                                   ),
                                 ),
@@ -98,15 +97,4 @@ class _DetailSampahDidonasikanPageState
           ]),
         ));
   }
-}
-
-Future<void> tes() async {
-  final res = await supabase.from('detail_sampah_dibuang').select('''
-  jumlah,
-  kategorisasi,
-  jenis_elektronik (
-    jenis
-  )
-''').eq('id_sampah_dibuang', 27);
-  print(res);
 }
