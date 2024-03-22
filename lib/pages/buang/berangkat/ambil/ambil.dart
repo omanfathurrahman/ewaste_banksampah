@@ -13,11 +13,34 @@ class AmbilBuang extends StatefulWidget {
 class _AmbilBuangState extends State<AmbilBuang> {
   Future<void> _konfirmasiSampahSudahDiambil() async {
     await supabase
-        .from("sampah_dibuang")
-        .update({"status_dibuang": "Sudah diserahkan"}).eq(
-            "id", widget.sampahDibuangId);
+        .from('sampah_dibuang')
+        .update({'status_dibuang': 'Sudah diserahkan'}).eq('id', widget.sampahDibuangId);
+    final userId = (await supabase
+        .from('sampah_dibuang')
+        .select('id_user')
+        .eq('id', widget.sampahDibuangId)
+        .single()
+        .limit(1))['id_user'];
 
-    if (mounted) context.go("/afterLoginLayout");
+    final jumlahSampahDibuangList = await supabase
+        .from('detail_sampah_dibuang')
+        .select('jumlah')
+        .eq('id_sampah_dibuang', widget.sampahDibuangId);
+    final jumlahSampahDibuang = jumlahSampahDibuangList
+        .map((item) => item['jumlah'])
+        .reduce((value, element) => value + element) as num;
+    final jumlahPoin = await supabase
+        .from('profile')
+        .select('jumlah_poin')
+        .eq('id', userId)
+        .single()
+        .limit(1);
+
+    await supabase.from('profile').update({
+      'jumlah_poin': jumlahPoin['jumlah_poin'] + jumlahSampahDibuang
+    }).eq('id', userId);
+    setState(() {});
+    if(mounted) context.go('/afterLoginLayout');
   }
 
   @override
