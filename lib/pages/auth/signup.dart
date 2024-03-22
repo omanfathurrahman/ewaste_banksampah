@@ -35,22 +35,25 @@ class _SignUpPageState extends State<SignUpPage> {
       "user_id" : supabase.auth.currentUser!.id,
       "banksampah_id": banksampahId,
     });
-    if (context.mounted) context.go('/login');
+    if (context.mounted) context.replace('/login');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(automaticallyImplyLeading: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
+            shrinkWrap: true,
+            reverse: true,
             children: [
               const Text(
-                "Register",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                'Register',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
+              const Text('Daftar akunmu disini'),
               TextField(
                 controller: _nameController,
                 decoration: const InputDecoration(
@@ -81,7 +84,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   final droppoinList = snapshot.data!;
                   return DropdownMenu(
                     onSelected: (value) {
-                      print(value);
                       setState(() {
                         banksampahId = value?['id'];
                       });
@@ -127,7 +129,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ],
               )
-            ],
+            ].reversed.toList(),
           ),
         ),
       ),
